@@ -1,0 +1,4 @@
+﻿The InternalFormat project is referend in HunterNotebook2 to allow it to automattally copy to output folder.
+
+It is loaded at runtime with the FileFormatHandler.GenericHandler() class. We don't access via reference.
+

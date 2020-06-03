@@ -1,0 +1,104 @@
+﻿
+
+The System uses an isolationist module. Any Dll Loaded by this systme get's its own AppDomain. Said AppDomain
+might be shared should the Dll Export multiple iFormat classes.
+
+
+The caller gets its own AppDomain Automatically.
+Each Plugin Dll Is isoluted it its own  domain Seperated from the AppDomain. Said Domain Does inherit 
+Security and Setup informat from the parent domain.
+
+On Creatation (with an instanced of GeneralHandler class)
+
+An AppDomain is made from existing settings of the callee. All Dlls loaded from scanning for format plugins
+are loaded into singulate app domains derived from this one made on GenericHandler's creation.
+
+
+
+Class Information
+
+GenericHandler() -- responsible for looking for and loading potential dll pluigins
+FileFormatPlugin2() -- version 2 of above
+
+---------------------------------
+Making a compatible class for this plugin system.
+------------------------------
+
+The class should be exported (i.e. public) and follow the example below. 
+
+Naming scheme is Important! The class should have "iFormat" in its name somewhere
+and is case sensitive. The class may have "NOEXPORT" in the name if for some reason the class should Not Be
+loaded at all.
+
+
+  interface iFormat_Example
+    {
+        public void ReadData(StreamReader Source, StreamWriter Output, out bool ContainsRtfTags);
+        public void WriteData(StreamReader Source, StreamWriter Output);
+        public string GetDialogBoxExt()
+        public string GetShortName();
+        public string GetFriendlyName()
+    }
+
+    When a class is considered it must export at the minumual the listed routines above with matching 
+    Parameter info. Argument numbers, return types, routines are non statuc and Argement Types of checked on 
+    load to ensure they match specs.
+    
+    NOTICE!  The checker currently only checks if the routine ReadData() has a 3rd parameter. It does not check
+    the type yet.  
+
+
+Descriptions of routines:
+------------------------------------
+ReadData() is expected to read a file format in whatever format it supports and write it as unicode text.
+------------------------------------
+
+Notes:
+Source is the already open file. Don't close it in your plugin. It is the caller of your plugin's problem.
+Output is a MemoryStream wrapped as a StreamWriter.   Don't Close that one either.
+
+
+ContainsRtfTags sets weather the read text contains RTF tags or not. 
+
+-----------------------------
+WriteData() is expected to read unicode text (or RTF) contained within source and write it in ouput
+stream in the targeted format.
+------------------------
+
+
+For example, should the Targeted format be Microsoft's Docx format, write said document to the output stream
+with the input's text
+
+
+GetDialogBoxExt() returns a string that can be pluged into a Windows OpenDialogBox or SaveDialogBox
+        
+GetShortName() should return a small yet descriptive name for this file format.  Currently this is used in the FileDialog Stuff of the main app
+
+GetFriendlyName() can return a more human readable name. It can also simply just call GetShortName()   Not Used ATM. Will Be exacted to startusbar and Main Form Title
+    }
+
+
+VISUAL LAYOUT OF DOMAINs used.
+
+
+Hunternotebook2's
+        -> Main AppDomain
+
+        FormatPlugin2
+            -> AppDomain created with settings from Main AppDomain copied
+
+            Plugin Dll #1
+                -> AppDomain made from FormatPlugin2's settings
+                    -> Dll loaded as assembly
+                    -> List of classes in this domain is in FormatPlugin2
+
+            Plugin Dll #2
+                -> AppDomain made from FormatPlugin2's settings
+                    -> Dll loaded as assembly
+                    -> List of classes in this domain is in FormatPlugin2
+
+            Plugin Dll #N
+                -> AppDomain made from FormatPlugin2's settings
+                    -> Dll loaded as assembly
+                    -> List of classes in this domain is in FormatPlugin2
+

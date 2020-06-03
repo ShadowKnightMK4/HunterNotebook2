@@ -1,0 +1,22 @@
+﻿
+
+GenerialPluginSys is a non specialzed Class to scan folders for assemblies and load them info their
+own app domain.  This generialied version is adapated from version 1.0 of notebook's plugin system.
+
+
+To Write For it:
+
+Add A reference to the project in your code.
+
+Make a child class of the Instanced_PluginContainer contained within GeneralPluginSys.
+Define GeneralPlugSys<YourSubclass> somewhere in your code.
+It is recommanded, although not required to export wrappers routines that wrap the dynamiclly loaded
+class functions you wish to call.
+
+
+
+The Instanced_PluginContainer defines the bare minumumn GeneralPluginSys() needs. The defined variables should
+remain public. Should you wish to change the underlying implementation without messing with the code, export some properties that match them.
+
+
+

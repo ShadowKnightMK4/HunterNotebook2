@@ -1,0 +1,20 @@
+﻿     Under Search Control is how you tell the software to interpret the entered string.
+     
+     Check 'Case Matters' to turn on case sensitive searching.
+     Check 'Use Wildcard' to turn on DOS filename wildcard matching
+     Check 'Allow Regular Expressions' to disable any preprocessing. You should be reading up on
+     regular expressions at microsoft's C# site to get the most out of that.
+
+     Below that is a box that can allow you to use a prebuilt expression.  Use the button next to 
+     it to edit these.
+
+
+     Under Other
+     Check 'start at top' to enable wrapping around one the end of the text is foudn.
+     checkbox5 - click to check it. Click again to uncheck it. (does nothing)
+
+     Find Next -> Find the next most recent on.
+     Find Last-> fand the one at the end of the text
+     Find First -> fidn the first one.
+
+
