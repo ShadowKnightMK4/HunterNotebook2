@@ -6,6 +6,16 @@ own app domain.  This generialied version is adapated from version 1.0 of notebo
 
 To Write For it:
 
+Step to Add to your project:
+#1 grab a copy and add it to your solution.
+#2 Subclass InstancedPluginContainer
+#3 Declare a class instance like DynamicClassLoader<Your Subclass of InstancedPluginContainer>
+
+
+InstancedPluginContainer handles storing the loading / uncluding of the remote c# class. It is recommanded you
+make helper routines to 
+
+
 Add A reference to the project in your code.
 
 Make a child class of the Instanced_PluginContainer contained within GeneralPluginSys.

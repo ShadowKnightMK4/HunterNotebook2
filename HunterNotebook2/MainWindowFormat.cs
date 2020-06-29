@@ -409,6 +409,10 @@ namespace HunterNotebook2
                     General_ResourceStrings.GetString("General_NoticeTitle", CultureInfo.CurrentUICulture),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+            TextWindowMode = CurrentTextMode.DynamicHighlighter;
+
+            MakeRichTextWindow();
+        
         }
 
 
@@ -764,18 +768,7 @@ namespace HunterNotebook2
             }
         }
 
-        /// <summary>
-        /// Fires once then turns itself off. SyncGui() adds it. Res09hs8boe for setting changed flag in the AppSetting
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void MainWindowRichText_TextChanged(object sender, EventArgs e)
-        {
-            CurrentFile.Changed = true;
-            MainWindowRichText.TextChanged -= MainWindowRichText_TextChanged;
-            SyncGuiToConfig();
-            ResetHighlighter();
-        }
+       
 
         private void NewToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1147,14 +1140,5 @@ namespace HunterNotebook2
             }
         }
 
-        private void MainWindowRichText_HScroll(object sender, EventArgs e)
-        {
-            MainWindowRichText.Invalidate();
-        }
-
-        private void MainWindowRichText_VScroll(object sender, EventArgs e)
-        {
-            MainWindowRichText.Invalidate();
-        }
     }
 }

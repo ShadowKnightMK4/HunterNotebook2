@@ -4,7 +4,7 @@ using System.Text;
 using System.Reflection;
 using System.IO;
 
-namespace FileFormatHandler
+namespace GenericPlugin
 {
 
     [Serializable]
@@ -471,7 +471,7 @@ namespace FileFormatHandler
 
     /// <summary>
     /// This bare minimum for the loaded plugin for this system.
-    /// To use: Redrive from this class and call the Generic routines with this.
+    /// To use: Derive from this class and call the Generic routines with this.
     /// </summary>
     public class InstancedPluginContainer : IDisposable
     {

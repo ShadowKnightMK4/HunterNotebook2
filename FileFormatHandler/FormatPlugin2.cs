@@ -4,6 +4,7 @@ using System.Text;
 using System.Reflection;
 using System.IO;
 using System.Globalization;
+using GenericPlugin;
 
 namespace FileFormatHandler
 {

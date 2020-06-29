@@ -10,6 +10,10 @@ namespace HunterNotebook2.SpecializedControls
 {
     public class RichTextBoxPaint: RichTextBox
     {
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+        }
         /// <summary>
         /// If true than turn paiting back on.
         /// </summary>

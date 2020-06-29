@@ -335,7 +335,7 @@
             // chooseFontToolStripMenuItem
             // 
             this.chooseFontToolStripMenuItem.Name = "chooseFontToolStripMenuItem";
-            this.chooseFontToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.chooseFontToolStripMenuItem.Size = new System.Drawing.Size(258, 34);
             this.chooseFontToolStripMenuItem.Text = "Choose Font";
             this.chooseFontToolStripMenuItem.Click += new System.EventHandler(this.ChooseFontToolStripMenuItem_Click);
             // 
@@ -345,7 +345,7 @@
             this.defaultToolStripMenuItem,
             this.lastChosenFontToolStripMenuItem});
             this.levelTextToolStripMenuItem.Name = "levelTextToolStripMenuItem";
-            this.levelTextToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.levelTextToolStripMenuItem.Size = new System.Drawing.Size(258, 34);
             this.levelTextToolStripMenuItem.Text = "Level Text";
             // 
             // defaultToolStripMenuItem
@@ -367,13 +367,13 @@
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(267, 6);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(255, 6);
             // 
             // syntaxHighlighterToolStripMenuItem
             // 
             this.syntaxHighlighterToolStripMenuItem.CheckOnClick = true;
             this.syntaxHighlighterToolStripMenuItem.Name = "syntaxHighlighterToolStripMenuItem";
-            this.syntaxHighlighterToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.syntaxHighlighterToolStripMenuItem.Size = new System.Drawing.Size(258, 34);
             this.syntaxHighlighterToolStripMenuItem.Text = "Syntax Highlighter";
             this.syntaxHighlighterToolStripMenuItem.Click += new System.EventHandler(this.syntaxHighlighterToolStripMenuItem_Click);
             // 
