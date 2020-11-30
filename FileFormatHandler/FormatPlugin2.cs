@@ -6,7 +6,7 @@ using System.IO;
 using System.Globalization;
 using GenericPlugin;
 
-namespace FileFormatHandler
+namespace PluginSystem
 {
     public class InstancedIFormat2 : InstancedPluginContainer
     {/*
@@ -18,6 +18,7 @@ namespace FileFormatHandler
 
         public void ReadData(StreamReader Source, StreamWriter Output, out bool ContainsRtfTags)
         {
+            // a cludge, I would not figure out to get out args to work this way in the remote class
             ContainsRtfTags = false;
             HandlerType.GetMethod("ReadData").Invoke(Handler, new object[] { Source, Output, ContainsRtfTags });
         }
@@ -96,6 +97,7 @@ namespace FileFormatHandler
             {
                 return false;
             }
+
 
 
 

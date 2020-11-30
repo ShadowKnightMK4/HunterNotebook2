@@ -24,7 +24,7 @@ namespace HunterNotebook2
         /// <summary>
         /// On Save or Load, this is the last format used. Used to now what format to use on chave changes prompt
         /// </summary>
-        public FileFormatHandler.InstancedIFormat2 Format { get; set; }
+        public PluginSystem.InstancedIFormat2 Format { get; set; }
         /// <summary>
         /// set if the text in the main window richtext has changed
         /// </summary>

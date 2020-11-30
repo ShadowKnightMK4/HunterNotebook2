@@ -11,9 +11,11 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)FormatPlugin2.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GeneralPluginSys.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SimpleToolPlugin.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)GeneralPluginSystem.txt" />
     <Content Include="$(MSBuildThisFileDirectory)HunterNotebook2%27s File Format Plugin Description.txt" />
+    <Content Include="$(MSBuildThisFileDirectory)Simple Tool Plugin.txt" />
   </ItemGroup>
 </Project>

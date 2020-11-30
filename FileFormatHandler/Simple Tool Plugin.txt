@@ -1,0 +1,3 @@
+﻿
+
+A Simple tool plugin exports a namae and a string. The string will be passed to Process.Start()

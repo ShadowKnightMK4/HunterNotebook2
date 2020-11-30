@@ -103,7 +103,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SpecializedControls\AutoTextBox.cs" />
     <Compile Include="SpecializedControls\RichTextBoxPaint.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -207,6 +206,10 @@
       <Project>{7cb9732a-d6e4-45c2-91e6-6976096f521a}</Project>
       <Name>InternalFormats</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SimpleToolsTest\SimpleToolsTest.csproj">
+      <Project>{147596be-563f-4f96-878f-9e96d7cf0fb5}</Project>
+      <Name>SimpleToolsTest</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SyntaxRichTextBox\SyntaxRichTextBox.csproj">
       <Project>{4b06ebca-fa7d-4f26-aca4-6af55d51e067}</Project>
       <Name>SyntaxRichTextBox</Name>
@@ -214,6 +217,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="DialogBox\FindDialogHelp.txt" />
+    <Content Include="DesignOverView.txt" />
     <Content Include="Documents\Notes.txt" />
   </ItemGroup>
   <Import Project="..\FileFormatHandler\FileFormatHandler.projitems" Label="Shared" />

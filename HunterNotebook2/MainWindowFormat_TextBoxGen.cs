@@ -44,17 +44,7 @@ namespace HunterNotebook2
         /// </summary>
         private void LinkSyntaxText()
         {
-            AutoTextBox tmp = new AutoTextBox();
-            tmp.Parent = this;
-            tmp.Left = 20;
-            tmp.Top
-                 = 40;
-            /*
-            MainWindowRichText.TextChanged += MainWindowRichText_TextChanged;
-            MainWindowRichText.KeyPress += MainWindowRichText_KeyPress;
-            MainWindowRichText.VScroll += MainWindowRichText_VScroll;
-            MainWindowRichText.HScroll += MainWindowRichText_HScroll;
-            ((Control)tmp).Paint += MainWindowFormat_Paint1; */
+
         }
 
         private void MainWindowFormat_Paint1(object sender, PaintEventArgs e)
@@ -64,6 +54,7 @@ namespace HunterNotebook2
 
         private void MakeRichTextWindow()
         {
+            return;
             if (MainWindowRichText != null)
             {
                 MainWindowRichText.Dispose();
@@ -94,7 +85,7 @@ namespace HunterNotebook2
             CurrentFile.Changed = true;
             MainWindowRichText.TextChanged -= MainWindowRichText_TextChanged;
             SyncGuiToConfig();
-            ResetHighlighter();
+ 
         }
 
 

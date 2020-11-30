@@ -1,0 +1,16 @@
+﻿* First HunterNotebook is aiming to primary replicate Notepad.exe in C#.
+
+
+* HunterNotebook plugin Types.
+
+File Type
+	-> Expands the supported Text file variations
+
+SimpleTool
+	-> Adds an Entry Under Static Tools that is launched when clicked
+
+
+Text Parsing
+	-> Varient of SimpleTool.  The plugin gets the WinForm handle for the text.
+			OnCall() <- triggers
+			OnFinish() <- when done.

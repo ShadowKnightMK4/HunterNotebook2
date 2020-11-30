@@ -12,7 +12,7 @@ namespace InternalFormats
     /// 
     /// iFormat tells the loaded that this may be a file format handled 
     /// 
-    /// NOEXPORT informs the loaded to NOT load this one.
+    /// NOEXPORT informs the loader to NOT load this one.
     /// </summary>
     public class GenericText_iFormat_NOEXPORT
     {

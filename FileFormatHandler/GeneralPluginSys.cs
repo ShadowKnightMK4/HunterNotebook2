@@ -119,13 +119,7 @@ namespace GenericPlugin
         #endregion
 
 
-        /// <summary>
-        /// Used to control if an assembly is ok to reture to the caller. return true if yes, return false is not
-        /// DOES NOT PREVENT LOADING the assembly in the probe. It just tells the routine to not use this one.
-        /// </summary>
-        /// <param name="VerifyAgainst">The loaded assembly check</param>
-        /// <returns></returns>
-        public delegate bool AssemblyCheck(Assembly VerifyAgainst);
+      
 
 
         #region load plugin 
@@ -325,11 +319,35 @@ namespace GenericPlugin
 
         #region Defined delegates and Callback
         /// <summary>
+        /// Used to control if an assembly is ok to reture to the caller. return true if yes, return false is not
+        /// DOES NOT PREVENT LOADING the assembly in the probe. It just tells the routine to not use this one.
+        /// </summary>
+        /// <param name="VerifyAgainst">The loaded assembly check</param>
+        /// <returns></returns>
+        public delegate bool AssemblyCheck(Assembly VerifyAgainst);
+
+        /// <summary>
         /// callback. Return true if the passed Info is ok to be possibly loaded as a plugin.
         /// </summary>
         /// <param name="Info">the dll or file to check against</param>
         /// <returns>true for it to match and false to prevent said dll from being loaded</returns>
         public delegate bool PluginFilterCheck(FileInfo Info);
+
+        /// <summary>
+        /// Returns true if the Passed file has a signiature. 
+        /// </summary>
+        /// <param name="Info"></param>
+        /// <returns></returns>
+        public bool PluginFilterCheck_AcceptSignedOnly(FileInfo Info)
+        {
+            if (Info == null)
+                return false;
+            if (File.Exists(Info.Name))
+            {
+                ICLRStrongName::StrongNameSignatureVerificationEx();
+            }
+            return false;
+        }
 
         /// <summary>
         /// Deleagate that should return true if the passed name and TypeInfo matchs what one is looking for
@@ -355,10 +373,10 @@ namespace GenericPlugin
         /// get a list of Dlls / assemblies that match something to load
         /// </summary>
         /// <param name="TargetFolder">Check this folder</param>
-        /// <param name="FilterCheck">if set, defines a routine that returns true if file object is ok to procedue with</param>
+        /// <param name="FilterCheck">if set, defines a routine that returns true if file object is ok to procede with</param>
         /// <param name="PluginStringContains">only valid if FilterCheck=null, FileObjects checked contain this string within their name</param>
         /// <returns></returns>
-        private List<string> GetValidExternTargets(string TargetFolder,
+        private static List<string> GetValidExternTargets(string TargetFolder,
                                       PluginFilterCheck FilterCheck,
                                       string PluginStringContains
                                       )
@@ -495,7 +513,7 @@ namespace GenericPlugin
         #endregion
 
         /// <summary>
-        /// Helper routine to get either only the passed type's exported routines or get *all* routines including base
+        /// Helper routine to get either only the passed type's exported routines or get *all* routines including base. Primary use is intended to allow child class to have an easy way to get *all* routines the remote object has
         /// </summary>
         /// <param name="IncludeParent">false is same as Inco.DeclaredMethod. True means include inherited methods also</param>
         /// <param name="Info">class Type to examine</param>

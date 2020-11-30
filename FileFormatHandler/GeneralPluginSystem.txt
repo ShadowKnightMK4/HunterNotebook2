@@ -12,8 +12,6 @@ Step to Add to your project:
 #3 Declare a class instance like DynamicClassLoader<Your Subclass of InstancedPluginContainer>
 
 
-InstancedPluginContainer handles storing the loading / uncluding of the remote c# class. It is recommanded you
-make helper routines to 
 
 
 Add A reference to the project in your code.
@@ -26,7 +24,8 @@ class functions you wish to call.
 
 
 The Instanced_PluginContainer defines the bare minumumn GeneralPluginSys() needs. The defined variables should
-remain public. Should you wish to change the underlying implementation without messing with the code, export some properties that match them.
+remain public. Should you wish to change the underlying implementation without messing with the code, export some properties
+that match them.
 
 
 

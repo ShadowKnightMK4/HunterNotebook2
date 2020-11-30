@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Reflection;
-using FileFormatHandler;
+using PluginSystem;
 using HunterNotebook2.DialogBox;
 using System.IO;
 using System.Globalization;
@@ -41,6 +41,8 @@ namespace HunterNotebook2
         /// </summary>
         //public FileFormatHandler.GenericHandler FileFormatPlugins;
         public FormatHandler FileFormatPlugins { get; set; }
+
+        public SimpleToolHandler SimpleToolPlugin { get; set; }
 
         BackgroundWorker CheckSyntaxWorker = new BackgroundWorker();
         /// <summary>
@@ -85,13 +87,13 @@ namespace HunterNotebook2
         }
 
         /// <summary>
-        /// When 1 / 0 is not terrible usefull for the user
+        /// Returns TrueText if val is true and FalseText if value is false
         /// </summary>
-        /// <param name="val"></param>
-        /// <param name="TrueText"></param>
-        /// <param name="FalseText"></param>
-        /// <returns></returns>
-        private string Toolkit_ToggleToString(bool val, string TrueText, string FalseText)
+        /// <param name="val">check this</param>
+        /// <param name="TrueText">This is returned if val is true</param>
+        /// <param name="FalseText">This is returned in val is false</param>
+        /// <returns>Returns TrueText if val is true and FalseText otherwise</returns>
+        private static string Toolkit_ToggleToString(bool val, string TrueText, string FalseText)
         {
             if (val)
             {
@@ -285,11 +287,67 @@ namespace HunterNotebook2
 
 
         /// <summary>
+        /// This looops thru the loaded plugins and populates the SimpleTools Menu Item. Should nothing be loaded. It hides the menu item instead
+        /// </summary>
+        private void LinkDyamicSimpleTools()
+        {
+            simpleToolToolStripMenuItem.DropDownItems.Clear();
+
+            foreach (InstancedSimpleToolPlugin Tool in SimpleToolPlugin.GetPlugins())
+            {
+
+              var Item =  simpleToolToolStripMenuItem.DropDownItems.Add(Tool.GetMenuItemName(), null, GenericSimpleTool_OnClick);
+                Item.Tag = Tool.GetMenuItemCommand();
+            }
+
+            if (simpleToolToolStripMenuItem.DropDownItems.Count == 0)
+            {
+                simpleToolToolStripMenuItem.Visible = false;
+            }
+        }
+
+        /// <summary>
+        /// Simple Tool Exec().  Get the text, replace the { } stuff with what the tool wants and launch it.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <remarks>
+        /// {0} becomes the current file (or untitled.txt) if never saved.
+        /// {1} becomes the currently selected text (or an empty string) if nother is selected
+        /// {2} becomes the *entire* contents of the text box
+        /// </remarks>
+        private void GenericSimpleTool_OnClick(object sender, EventArgs e)
+        {
+            ToolStripItem That = (ToolStripItem)sender;
+            string tag = (string)That.Tag;
+            if (tag.Contains("{0}"))
+            {
+                tag = tag.Replace("{0}", CurrentFile.SourceLocation);
+            }
+
+            if (tag.Contains("{1}"))
+            {
+                tag = tag.Replace("{1}", MainWindowRichText.SelectedText);
+            }
+            if (tag.Contains("{2}"))
+            {
+                tag = tag.Replace("{2}", MainWindowRichText.Text);
+            }
+            
+            using (Process cmd = new Process())
+            {
+                cmd.StartInfo = new ProcessStartInfo();
+                cmd.StartInfo.FileName = tag;
+                cmd.Start();
+            }
+        }
+
+        /// <summary>
         /// This loops thru the loaded plugins and dynamicly recreates their menu with each call.
         /// The class that handles the format is stored in the Tag value of the ToolStripItems.
         /// The Generic Event on click fetchs the tag and either opens or saves the file based on what to do
         /// </summary>
-        private void LinkDymaicFileFormatMenus()
+        private void LinkDyamicFileFormatMenus()
         {
             // clear the sub menus
             saveAsToolStripMenuItem.DropDownItems.Clear();
@@ -393,6 +451,15 @@ namespace HunterNotebook2
                 }
             }
 
+
+            if (SimpleToolPlugin == null)
+            {
+                errmsgs.AppendLine("No Simple Tools Found");
+            }
+            else
+            {
+                LinkDyamicSimpleTools();
+            }
             if (FileFormatPlugins == null)
             {
                 errmsgs.AppendLine(MainWindow_ResourceStrings.GetString("MainWindow_PluginMessages_PluginFormatLoadFail", CultureInfo.CurrentUICulture));
@@ -400,7 +467,7 @@ namespace HunterNotebook2
             else
             {
                 // generate the open and save menuitems for each loaded plugin
-                LinkDymaicFileFormatMenus();
+                LinkDyamicFileFormatMenus();
             }
             // show error if non empty
             if (errmsgs.Length > 0)
@@ -878,267 +945,26 @@ namespace HunterNotebook2
         }
 
 
-        #region Syntax highlighting code
-        AsyncSyntaxHighlight.HighlighterSyntax Syntax = new AsyncSyntaxHighlight.HighlighterSyntax();
-        List<Match> SyntaxResult;
-        private SyntaxBackgroundThreadArg ThreadSyntaxArg = new SyntaxBackgroundThreadArg();
-
-
-
-
-        /// <summary>
-        /// quick routine to set colection color
-        /// </summary>
-        /// <param name="start"></param>
-        /// <param name="len"></param>
-        /// <param name="c"></param>
-        private void SetHighlight(int start, int len, Color c)
-        {
-            MainWindowRichText.SelectionStart = start;
-            MainWindowRichText.SelectionLength = len;
-            MainWindowRichText.SelectionColor = c;
-        }
-
-        List<Match> BulkUpdate;
-        private void BulkSetColor()
-        {
-            if (SyntaxResult.Count < 5)
-            {
-                SetColors();
-            }
-            else
-            {
-                if (BulkUpdate != null)
-                {
-                    int cap;
-                    if (BulkUpdate.Count >= 6)
-                    {
-                        cap = 5;
-                    }
-                    else
-                    {
-                        cap = BulkUpdate.Count;
-                    }
-                   for (int step =0; step < cap;step++)
-                    {
-                        SetHighlight(BulkUpdate[step].Index, BulkUpdate[step].Length, Color.FromArgb(Syntax.GetColor(BulkUpdate[step].Value).Value));
-                    }
-                    BulkUpdate.RemoveRange(0, cap);
-
-                }
-                else
-                {
-
-                }
-            }
-        }
-        /// <summary>
-        /// set colors based on SyntaxResults
-        /// </summary>
-        private void SetColors()
-        { 
-            if (SyntaxResult != null)
-            {
-                if (SyntaxResult.Count < 5)
-                {
-                    
-                    foreach (Match m in SyntaxResult)
-                    {
-                        SetHighlight(m.Index, m.Length, Color.FromArgb(Syntax.GetColor(m.Value).Value));
-                    }
-                    SyntaxResult.Clear();
-                }
-                else
-                {
-                    SpecializedControls.ControlExtras.SetRedrawStatus(MainWindowRichText, false);
-                    for (int step = 0; step <= 5; step++)
-                    {
-                        SetHighlight(SyntaxResult[step].Index, SyntaxResult[step].Length, Color.FromArgb(Syntax.GetColor(SyntaxResult[step].Value).Value));
-                    }
-                    SpecializedControls.ControlExtras.SetRedrawStatus(MainWindowRichText, true);
-
-                    if (BulkUpdate == null)
-                    {
-                        BulkUpdate = new List<Match>();
-                    }
-                    for (int step = 6; step < SyntaxResult.Count; step++) 
-                    {
-                        BulkUpdate.Add(SyntaxResult[step]);
-                    }
-                    SyntaxResult.RemoveRange(0, 5);
-                }
-            }
-        }
-
-        class Hit
-        {
-            public Hit(Match Pos, int Offset)
-            {
-                this.Pos = Pos;
-                this.Offset = Offset;
-            }
-            public Match Pos;
-            public int Offset;
-        }
-
-
-        // process buffers hits with offset
-        private void ProcessHits(int cap)
-        {
-            int scap = cap;
-            if (BulkUpdate == null) return;
-            if (BulkUpdate.Count < scap)
-            {
-                scap = BulkUpdate.Count;
-            }
-            SpecializedControls.ControlExtras.SetRedrawStatus(MainWindowRichText, false);
-            for (int step = 0; step < scap; step++)
-            {
-                var pop = BulkUpdate[step];
-                //SetHighlight(pop.Offset + pop.Pos.Index, pop.Pos.Length, Color.FromArgb(Syntax.GetColor(pop.Pos.Value).Value));
-               
-                try
-                {
-                    var C = Color.FromArgb(Syntax.GetColor(pop.Value).Value);
-                    SetHighlight(pop.Index, pop.Length, C);
-                }
-                catch (KeyNotFoundException)
-                {
-                    SetHighlight(pop.Index, pop.Length, Color.FromArgb(Syntax.DefaultColor.Value));
-                }
-            }
-            SpecializedControls.ControlExtras.SetRedrawStatus(MainWindowRichText, true) ;
-            BulkUpdate.RemoveRange(0, scap);
-        }
-        class SyntaxBackgroundThreadArg
-        {
-            /// <summary>
-            /// the thing that highlights
-            /// </summary>
-            public AsyncSyntaxHighlight.HighlighterSyntax Syntax;
-            /// <summary>
-            /// the text we examine
-            /// </summary>
-            public volatile string Text;
-            /// <summary>
-            /// true if the worker thread is active
-            /// </summary>
-            public volatile bool Enabled;
-            public bool IsRunning;
-
-            /// <summary>
-            /// start of position to look at
-            /// </summary>
-            public volatile int StartPos;
-            /// <summary>
-            /// length of position to look at
-            /// </summary>
-            public volatile int Length;
-        }
-
-
-        private void StartSyntaxHighlighter()
-        {
-            StartSyntaxHighlighter(0, MainWindowRichText.Text.Length);
-        }
-
-        /// <summary>
-        /// Start the syntax higlighter and check the passed part
-        /// </summary>
-        private void StartSyntaxHighlighter(int start, int len)
-        {
-           if (ThreadSyntaxArg.Enabled == false)
-            {
-                ThreadSyntaxArg.Enabled = true;
-            }
-            ThreadSyntaxArg.Text = MainWindowRichText.Text;
-            ThreadSyntaxArg.Syntax = Syntax;
-            Syntax.SetDefaultColor = AsyncSyntaxHighlight.HighlighterSyntax.DefaultColorAction.SetCursorPosition;
-            ThreadSyntaxArg.Syntax.Compile();
-            ThreadSyntaxArg.StartPos = start;
-            ThreadSyntaxArg.Length = len;
-            TimerApplySyntax.Enabled = true;
-            
-            CheckSyntaxWorker.DoWork += CheckSyntaxWorker_DoWork;
-            CheckSyntaxWorker.RunWorkerAsync(ThreadSyntaxArg);
-        }
-
-        private void syntaxHighlighterToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (syntaxHighlighterToolStripMenuItem.Checked)
-            {
-                Syntax.Add("The", new AsyncSyntaxHighlight.HighlighterColor(Color.Red.ToArgb()));
-                Syntax.Add("Red", new AsyncSyntaxHighlight.HighlighterColor(Color.Green.ToArgb()));
-
-                StartSyntaxHighlighter();
-                Syntax.SetDefaultColor = AsyncSyntaxHighlight.HighlighterSyntax.DefaultColorAction.SetCursorPosition;
-                Syntax.DefaultColor = new AsyncSyntaxHighlight.HighlighterColor(Color.Black.ToArgb());
-            }
-        }
-
-        /// <summary>
-        /// this runs on a background thread
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void CheckSyntaxWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            SyntaxBackgroundThreadArg box = (SyntaxBackgroundThreadArg)e.Argument;
-            box.IsRunning = true;
-
-            while (e.Cancel == false)
-            {
-                var threadresults = await box.Syntax.RunCheckAsync(box.Text.Substring(box.StartPos, box.Length)).ConfigureAwait(true);
-                SyntaxResult = threadresults;
-            }
-            box.IsRunning = false;
-            SyntaxResult = null;
-            e.Result = null;
-        }
-
-        /// <summary>
-        /// Apply the highlighing and update the text
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TimerApplySyntax_Tick(object sender, EventArgs e)
-        {
-            if (SyntaxResult != null)
-            {
-                if (SyntaxResult.Count > 0)
-                {
-                    ProcessHits(5);
-                    SetColors();
-                }
-            }
-            ThreadSyntaxArg.Text = MainWindowRichText.Text;
-            TimerApplySyntax.Enabled = true;
-
-        }
-
-        /// <summary>
-        /// Update the thread argument to the current text, set the timer to on, and run the thread if not runnig
-        /// </summary>
-        private void ResetHighlighter() 
-        {
-            ThreadSyntaxArg.Text = MainWindowRichText.Text;
-            TimerApplySyntax.Enabled = true;
-            if (ThreadSyntaxArg.IsRunning == false)
-            {
-                CheckSyntaxWorker.RunWorkerAsync(ThreadSyntaxArg);
-            }
-        }
-        #endregion
+        
 
         private void MainWindowRichText_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (ThreadSyntaxArg.IsRunning)
-            {/*
-                SpecializedControls.ControlExtras.SetRedrawStatus(MainWindowRichText, true);
-                MainWindowRichText.Invalidate();
-                SpecializedControls.ControlExtras.SetRedrawStatus(MainWindowRichText, false);*/
-            }
+   
         }
 
+        private void aboutAppToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void alwaysOnTopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void alwaysOnTopToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            this.TopMost = alwaysOnTopToolStripMenuItem.Checked;
+        }
     }
 }

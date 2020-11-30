@@ -203,7 +203,7 @@ namespace HunterNotebook2.SpecializedControls
                                 }
                                 else
                                 {
-                                    Lines[CurrentLine].Remove(CurrentLineChar-1, 1);
+                                   Lines[CurrentLine].Remove(CurrentLineChar-1, 1);
                                     CurrentLineChar--;
                                 }
                                 break;

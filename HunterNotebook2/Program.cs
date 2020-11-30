@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using FileFormatHandler;
+using PluginSystem;
 using System.IO;
 using System.Resources;
 
@@ -15,6 +15,7 @@ namespace HunterNotebook2
     {
         //static GenericHandler fileFormats;
         static FormatHandler FileFormats;
+        static SimpleToolHandler SimpleTools;
         static ApplicationState CurrentState;
 
         /// <summary>
@@ -56,13 +57,15 @@ namespace HunterNotebook2
                 }
             }
         }
-        public static void FormatChecker(out FormatHandler Formats)
+        public static void SetupPluginVarients(out FormatHandler Formats, out SimpleToolHandler Tools)
         //public static void FormatChecker(out GenericHandler Formats)
         {
             /*fileFormats = new GenericHandler();
             Formats = fileFormats;*/
             FileFormats = new FormatHandler();
             Formats = FileFormats;
+            SimpleTools = new SimpleToolHandler();
+            Tools = SimpleTools;
         }
         /// <summary>
         /// The main entry point for the application.
@@ -73,11 +76,12 @@ namespace HunterNotebook2
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //FormatChecker(out fileFormats);
-            FormatChecker(out FileFormats);
+            SetupPluginVarients(out FileFormats, out SimpleTools);
             FetchConfigFile();
             using (var MainWindow = new MainWindowFormat())
             {
                 MainWindow.FileFormatPlugins = FileFormats;
+                MainWindow.SimpleToolPlugin = SimpleTools;
                 MainWindow.CurrentState = CurrentState;
                 Application.Run(MainWindow);
             }

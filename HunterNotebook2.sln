@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HunterNotebook2", "HunterNo
 		{7CB9732A-D6E4-45C2-91E6-6976096F521A} = {7CB9732A-D6E4-45C2-91E6-6976096F521A}
 	EndProjectSection
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "FileFormatHandler", "FileFormatHandler\FileFormatHandler.shproj", "{CD8D81D2-C269-4944-B73B-D888634C6A93}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PluginSystem", "FileFormatHandler\PluginSystem.shproj", "{CD8D81D2-C269-4944-B73B-D888634C6A93}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PrintHandler", "PrintHandler\PrintHandler.shproj", "{B1FD0639-07A4-4C7D-BE5A-61D3FAEE8CEE}"
 EndProject
@@ -17,6 +17,8 @@ EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "AsyncSyntaxHighlight", "AsyncSyntaxHighlight\AsyncSyntaxHighlight.shproj", "{FE10027D-DFCD-4EB3-B348-44FA40B94B18}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxRichTextBox", "SyntaxRichTextBox\SyntaxRichTextBox.csproj", "{4B06EBCA-FA7D-4F26-ACA4-6AF55D51E067}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleToolsTest", "SimpleToolsTest\SimpleToolsTest.csproj", "{147596BE-563F-4F96-878F-9E96D7CF0FB5}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -44,6 +46,10 @@ Global
 		{4B06EBCA-FA7D-4F26-ACA4-6AF55D51E067}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B06EBCA-FA7D-4F26-ACA4-6AF55D51E067}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B06EBCA-FA7D-4F26-ACA4-6AF55D51E067}.Release|Any CPU.Build.0 = Release|Any CPU
+		{147596BE-563F-4F96-878F-9E96D7CF0FB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{147596BE-563F-4F96-878F-9E96D7CF0FB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{147596BE-563F-4F96-878F-9E96D7CF0FB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{147596BE-563F-4F96-878F-9E96D7CF0FB5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -20,5 +20,19 @@ namespace HunterNotebook2
         /// Open Explorer to the config file location on startup
         /// </summary>
         public static bool ExploreConfigLocationOnLoad = false;
+
+        /// <summary>
+        /// The app refuses to deal with unsigned plugins.
+        /// </summary>
+        public static bool RequireSigned
+        {
+            get
+            {
+                return HoldingStatic;
+            }
+        }
+
+        private static readonly bool HoldingStatic = true;
+
     }
 }
